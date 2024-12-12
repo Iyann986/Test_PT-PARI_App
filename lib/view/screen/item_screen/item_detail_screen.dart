@@ -11,7 +11,13 @@ class ItemDetailsScreen extends StatelessWidget {
     final itemViewModel = Provider.of<ItemViewModel>(context);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Item Details')),
+      appBar: AppBar(
+        title: const Text(
+          'Item Details',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.deepPurple,
+      ),
       body: FutureBuilder(
         future: itemViewModel.fetchItemById(id),
         builder: (context, snapshot) {
