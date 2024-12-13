@@ -12,6 +12,15 @@ class ItemListScreen extends StatefulWidget {
 }
 
 class _ItemListScreenState extends State<ItemListScreen> {
+  late Future<void> _fetchItemsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    final itemViewModel = Provider.of<ItemViewModel>(context, listen: false);
+    _fetchItemsFuture = itemViewModel.fetchItems();
+  }
+
   @override
   Widget build(BuildContext context) {
     final itemViewModel = Provider.of<ItemViewModel>(context);
@@ -25,18 +34,25 @@ class _ItemListScreenState extends State<ItemListScreen> {
         backgroundColor: Colors.deepPurple,
       ),
       body: FutureBuilder(
-        future: itemViewModel.fetchItems(),
+        future: _fetchItemsFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text('Failed to load items: ${snapshot.error}'),
+            );
           }
+
           return ListView.builder(
             itemCount: itemViewModel.items.length,
             itemBuilder: (context, index) {
               final item = itemViewModel.items[index];
               return ListTile(
                 title: Text(item.name),
-                subtitle: Text(item.data?.toString() ?? 'No Data'),
+                subtitle: Text(
+                  item.data?.toString() ?? 'No Data',
+                ),
                 onTap: () => _showItemDetails(context, item.id!),
               );
             },

@@ -17,11 +17,12 @@ class ItemDetailsScreen extends StatelessWidget {
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Colors.deepPurple,
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: FutureBuilder(
         future: itemViewModel.fetchItemById(id),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
+          if (snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
           }
 
@@ -39,11 +40,20 @@ class ItemDetailsScreen extends StatelessWidget {
                     style: const TextStyle(fontSize: 20)),
                 const SizedBox(height: 10),
                 Text('Data: ${item.data?.toString() ?? 'No Data'}'),
-                const Spacer(),
-                ElevatedButton(
-                  onPressed: () => _deleteItem(context, item.id!),
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                  child: const Text('Delete Item'),
+                const SizedBox(
+                  height: 20,
+                ),
+                Center(
+                  child: ElevatedButton(
+                    onPressed: () => _deleteItem(context, item.id!),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                    ),
+                    child: const Text(
+                      'Delete Item',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
                 ),
               ],
             ),

@@ -43,6 +43,9 @@ class ItemViewModel extends ChangeNotifier {
       headers: {'Content-Type': 'application/json'},
       body: json.encode(item.toJson()),
     );
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+
     if (response.statusCode == 201) {
       fetchItems();
     }

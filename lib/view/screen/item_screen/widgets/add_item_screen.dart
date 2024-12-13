@@ -26,6 +26,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Colors.deepPurple,
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -58,7 +59,10 @@ class _AddItemScreenState extends State<AddItemScreen> {
                     return 'Please enter data';
                   }
                   try {
-                    jsonDecode(value);
+                    final decoded = jsonDecode(value);
+                    if (decoded is! Map<String, dynamic>) {
+                      return 'JSON must be a key-value object';
+                    }
                   } catch (e) {
                     return 'Invalid JSON format';
                   }
